@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,6 +38,39 @@
                 </td>
                 <td>
                     Ejercicios de comparaciones con números
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="numeros_aleatorios.php">números.php</a>
+                </td>
+                <td>
+                    Ejercicios números aleatorios
+                </td>
+
+            </tr>
+            <tr>
+                <td>
+                    <a href="clases_semana.php">clases_semana.php</a>
+                </td>
+                <td>
+                    Clases de la semana
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="edades.php">edades.php</a>
+                </td>
+                <td>
+                    Edades
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="listas.php">listas.php</a>
+                </td>
+                <td>
+                    Listas
                 </td>
             </tr>
         </tbody>
