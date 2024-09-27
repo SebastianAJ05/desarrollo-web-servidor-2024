@@ -73,6 +73,15 @@
                     Listas
                 </td>
             </tr>
+            <tr>
+                <td>
+                    <a href="ejercicios1.php">ejercicios1.php</a>
+                </td>
+                <td>
+                    Primer listado de ejercicios del tema de 
+                    estructuras de control
+                </td>
+            </tr>
         </tbody>
     </table>
 </body>
