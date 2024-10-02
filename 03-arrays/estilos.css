@@ -1,0 +1,9 @@
+.aprobado{
+    background-color: green;
+}
+.suspenso{
+    background-color: red;
+}
+table, td{
+    border: 1px solid black;
+}
