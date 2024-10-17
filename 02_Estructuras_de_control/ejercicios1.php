@@ -159,6 +159,29 @@
         $num++;
     }
     echo "</ol>";
+
+    /**
+     * CALCULAR EL FIBONACCI DE UN NÚMERO
+     * FIB(0) = 0
+     * FIB (2) = 1  FIB(6) = 8
+     * FIB(3) = 2   FIB(7) = 13
+     */
+    $aux1 = 0; #fib(0)
+    $aux2 = 1; #fib(1)
+    $fibn2 = null;
+
+    $n = 4;
+
+    for ($i=0; $i < $n; $i++) { 
+        $fib = $aux1 + $aux2;
+        $aux1 = $aux2;
+        $aux2 = $fib;
+    }
+    echo "<h4>El fibonacci de $n es $fib</h4>";
+
+    // Para los 10 primeros primos, calcular sus respectivos números
+    //de fibonacci
+    //Calcular: fib(2), fib(3), fib(5), etc...
      ?>
 </body>
 </html>
