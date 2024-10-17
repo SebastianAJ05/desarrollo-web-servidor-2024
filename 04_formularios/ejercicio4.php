@@ -29,12 +29,9 @@
         $grados = (int)$_POST["c_grados"];
         define("CELSIUS_KELVIN", 274.15);
         define("CELSIUS_FARENHEIT", 33.8);
-        define("CELSIUS_CELSIUS", 1);
-        define("KELVIN_KELVIN", 1);
         define("KELVIN_FARENHEIT", -457.87);
         define("KELVIN_CELSIUS", -272.15);
         define("FARENHEIT_KELVIN", 255.928);
-        define("FARENHEIT_FARENHEIT", 1);
         define("FARENHEIT_CELSIUS", -17.2222);
 
         $grados_usu = $_POST["grados_usu"];
@@ -42,18 +39,16 @@
 
         $grados_convertidos = 0;
 
-        if($grados_usu == "CELSIUS" &&  $grados_conv == "KELVIN")  $grados_convertidos = (float)$grados*CELSIUS_KELVIN;
-        elseif($grados_usu == "CELSIUS" &&  $grados_conv == "FARENHEIT")  $grados_convertidos = (float)$grados*CELSIUS_FARENHEIT;
-        elseif($grados_usu == "CELSIUS" &&  $grados_conv == "CELSIUS")    $grados_convertidos = (float)$grados*CELSIUS_CELSIUS;
-        //-----------------------------CELSIUS-------------------------
-        elseif($grados_usu == "KELVIN" &&  $grados_conv == "KELVIN")    $grados_convertidos = (float)$grados*KELVIN_KELVIN;
-        elseif($grados_usu == "KELVIN" &&  $grados_conv == "FARENHEIT") $grados_convertidos = (float)$grados*KELVIN_FARENHEIT;
-        elseif($grados_usu == "KELVIN" &&  $grados_conv == "CELSIUS")    $grados_convertidos = (float)$grados*KELVIN_CELSIUS;
-        //-----------------------------KELVIN-------------------------
-        elseif($grados_usu == "FARENHEIT" &&  $grados_conv == "KELVIN")    $grados_convertidos = (float)$grados*FARENHEIT_KELVIN;
-        elseif($grados_usu == "FARENHEIT" &&  $grados_conv == "FARENHEIT") $grados_convertidos =  (float)$grados*FARENHEIT_FARENHEIT;
-        elseif($grados_usu == "FARENHEIT" &&  $grados_conv == "CELSIUS") $grados_convertidos = (float)$grados*FARENHEIT_CELSIUS;
-        //-----------------------------FARENHEIT-------------------------
+        $grados_convertidos = match (true) {
+            ($grados_usu == "CELSIUS" &&  $grados_conv == "KELVIN")    => (float)$grados*CELSIUS_KELVIN,
+            ($grados_usu == "CELSIUS" &&  $grados_conv == "FARENHEIT") => (float)$grados*CELSIUS_FARENHEIT,
+            ($grados_usu == $grados_conv) => (float)$grados,
+            ($grados_usu == "KELVIN" &&  $grados_conv == "FARENHEIT") => (float)$grados*KELVIN_FARENHEIT,
+            ($grados_usu == "KELVIN" &&  $grados_conv == "CELSIUS")  => (float)$grados*KELVIN_CELSIUS,
+            ($grados_usu == "FARENHEIT" &&  $grados_conv == "KELVIN") => (float)$grados*FARENHEIT_KELVIN,
+            ($grados_usu == "FARENHEIT" &&  $grados_conv == "CELSIUS") =>(float)$grados*FARENHEIT_CELSIUS
+        };
+
         
         echo "<p>$grados grados en grados $grados_usu equivalen a $grados_convertidos grados en grados $grados_conv</p>";
     }
