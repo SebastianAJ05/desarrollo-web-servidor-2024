@@ -82,6 +82,11 @@
                 ?>
             </tbody>
         </table>
+        <h3>¿Olvidaste tu contraseña?</h3>
+        <a href="../usuario/cambiar_credenciales.php?usuario=<?php echo $_SESSION["usuario"]?>" class="btn btn-warning">Cambiar contraseña</a>
+        <br><br>
+        <h3>Aquí puedes interactuar con las categorías</h3>
+        <a href="../categorias/index.php" class="btn btn-info">Ir a Categorías</a>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>

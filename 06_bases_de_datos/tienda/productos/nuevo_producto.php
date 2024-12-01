@@ -5,11 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuevo Producto</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="../util/estilos.css">
     <?php
         error_reporting( E_ALL );
         ini_set( "display_errors", 1 ); 
         
         require('../util/conexion.php');
+
+        include('../util/funciones.php');
+
+        session_start();
+        if (!isset($_SESSION["usuario"])) {
+            header("location: ../usuario/iniciar_sesion.php");
+            exit;
+        }
     ?>
 </head>
 <body>
@@ -27,34 +36,115 @@
             }
             //print_r($estudios);
             if($_SERVER["REQUEST_METHOD"] == "POST") {
-                $nombre = $_POST["nombre"];
-                $precio = $_POST["precio"];
-                $categoria = $_POST["categoria"];
-                $stock = $_POST["stock"];
-                $descripcion = $_POST["descripcion"];
+                $tmp_nombre = $_POST["nombre"];
+                $tmp_precio = $_POST["precio"];
+                //$tmp_categoria = $_POST["categoria"];
+                $tmp_stock = $_POST["stock"];
+                $tmp_descripcion = $_POST["descripcion"];
                 // $_FILES, QUE ES UN ARRAY DOBLE!!!
 
                 $direccion_temporal = $_FILES["imagen"]["tmp_name"];
                 $nombre_imagen = $_FILES["imagen"]["name"];
                 move_uploaded_file($direccion_temporal, "../imagenes/$nombre_imagen");
 
-                $sql = "INSERT INTO productos 
+                //Valido el nombre
+
+                if (!isset($tmp_nombre)) {
+                    $err_nombre = "ERROR: Nombre no leído";
+                }else{
+                    if ($tmp_nombre == "") {
+                        $err_nombre = "El nombre es obligaotrio";
+                    }else{
+                        $tmp_nombre = sanear($tmp_nombre);
+
+                        if (strlen($tmp_nombre) < 2 || strlen($tmp_nombre) > 50) {
+                            $err_nombre = "El nombre debe tener entre 2 y 50 caracteres";
+                        }else{
+                            $patron = "/^[A-Za-z0-9 ñÑÁÉÍÓÚáéíóú]/";
+                            if (!preg_match($patron, $tmp_nombre)) {
+                                $err_nombre = "El nombre sólo puede tener letras, números y espacios en blanco";
+                            }else{
+                                $nombre = $tmp_nombre;
+                            }
+                        }
+                    }
+                }
+
+                //Valido el precio
+
+                if (!isset($tmp_precio)) {
+                    $err_precio = "ERROR: Nombre no leído";
+                }else{
+                    if ($tmp_precio == "") {
+                        $err_precio = "El precio es obligatorio";
+                    }else{
+                        $tmp_precio = sanear($tmp_precio);
+                        $patron = "/^[0-9]{1,4}(\.[0-9]{1,2})?/";
+                        if (!preg_match($patron, $tmp_precio)) {
+                            $err_precio = "El precio debe tener la parte numérica y la parte decimal";
+                        }else{
+                            $precio = $tmp_precio;
+                        }
+                    }
+                }
+
+                //Valido la descripción
+
+                if (!isset($tmp_descripcion)) {
+                    $err_descripcion = "ERROR: Descripción no leída";
+                }else{
+                    if ($tmp_descripcion == "") {
+                        $err_descripcion = "La descripción es obligaotria";
+                    }else{
+                        $tmp_descripcion = sanear($tmp_descripcion);
+                        if (strlen($tmp_descripcion) > 255) {
+                            $err_descripcion = "La descripción no puede tener más de 255 caracteres";
+                        }else{
+                            $descripcion = $tmp_descripcion;
+                        }
+                    }
+                }
+
+                //Valido el stock
+
+                if (!isset($tmp_stock)) {
+                    $err_stock = "ERROR: Stock no leido";
+                }else{
+                    if ($tmp_stock == "") {
+                        $stock = 0;
+                    }else{
+                        if (filter_var($tmp_stock, FILTER_VALIDATE_INT)) {
+                            $$err_stock = "El stock debe un número";
+                        }else{
+                            if ($tmp_stock >= 1000) {
+                                $err_stock = "El stock no puede tener más de 3 cifras";
+                            }else{
+                                $stock = $tmp_stock;
+                            }
+                        }
+                    }
+                }
+
+                //Valido la categoría
+
+                if (!isset($tmp_categoria)) {
+                    $err_categoria = "ERROR: Categoría no leída";
+                }else{
+                    $categoria = $tmp_categoria;
+                }
+
+
+                if (isset($nombre) && isset($precio) && isset($descripcion) && isset($stock) && isset($categoria)) {
+                    $sql = "INSERT INTO productos 
                     (nombre, precio, categoria, stock, imagen, descripcion)
                     VALUES
                     ('$nombre', $precio, '$categoria', $stock, 
-                        '../imagenes/$nombre_imagen', '$descripcion')
-                ";
+                            '../imagenes/$nombre_imagen', '$descripcion')
+                    ";
 
-                $_conexion -> query($sql);
-
-                /**
-                 * INSERT INTO animes
-                 *  (nombre, precio, categoria, num_temporadas)
-                 * VALUES
-                 *  ('Doraemon', 'Toei Animation', 1979, 1);
-                 * 
-                 */
-
+                    $_conexion -> query($sql);
+                }
+                
                 
             }
         ?>
@@ -62,10 +152,12 @@
             <div class="mb-3">
                 <label class="form-label">Nombre</label>
                 <input class="form-control" name="nombre" type="text">
+                <?php if(isset($err_nombre)) echo "<span class='error'>$err_nombre</span>"?>
             </div>
             <div class="mb-3">
                 <label class="form-label">Precio: </label>
                 <input class="form-control" name="precio" type="text">
+                <?php if(isset($err_precio)) echo "<span class='error'>$err_precio</span>"?>
             </div>
             <div class="mb-3">
                 <label class="form-label">Categoría</label>
@@ -77,10 +169,12 @@
                         </option>
                     <?php } ?>
                 </select>
+                <?php if(isset($err_categoria)) echo "<span class='error'>$err_categoria</span>"?>
             </div>            
             <div class="mb-3">
                 <label class="form-label">Stock: </label>
                 <input class="form-control" name="stock" type="text">
+                <?php if(isset($err_stock)) echo "<span class='error'>$err_stock</span>"?>
             </div>
             <div class="mb-3">
                 <label class="form-label">Imagen</label>
@@ -88,7 +182,8 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Descripcion</label>
-                <input class="form-control" name="descripcion" type="text">
+                <textarea class="form-control" name="descripcion"></textarea>
+                <?php if(isset($err_descripcion)) echo "<span class='error'>$err_descripcion</span>"?>
             </div>
             <div class="mb-3">
                 <input class="btn btn-primary" type="submit" value="Crear">

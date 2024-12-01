@@ -10,6 +10,12 @@
         ini_set( "display_errors", 1 ); 
         
         require('../util/conexion.php');
+
+        session_start();
+        if (!isset($_SESSION["usuario"])) {
+            header("location: ../usuario/iniciar_sesion.php");
+            exit;
+        }
     ?>
     <style>
         
@@ -48,7 +54,7 @@
                         ?>
                         <td>
                             <a class="btn btn-primary" 
-                               href="editar_categoria.php?categoria=<?php echo $fila["categoria"] ?>">Editar</a>
+                               href="editar_categoria.php?categoria=<?php echo $fila["categoria"]?>&descripcion=<?php echo $fila["descripcion"]?>">Editar</a>
                         </td>
                         <td>
                             <form action="" method="post" enctype="multipart/form-data">
@@ -62,6 +68,8 @@
                 ?>
             </tbody>
         </table>
+        <h3>Volver a Productos</h3>
+        <a href="../productos/index.php" class="btn btn-info">Ir a productos</a>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>

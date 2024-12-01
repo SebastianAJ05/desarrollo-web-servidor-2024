@@ -5,43 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar categoria</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="../util/estilos.css">
     <?php
         error_reporting( E_ALL );
         ini_set( "display_errors", 1 ); 
         
         require('../util/conexion.php');
+
+        include('../util/funciones.php');
+
+        session_start();
+        if (!isset($_SESSION["usuario"])) {
+            header("location: ../usuario/iniciar_sesion.php");
+            exit;
+        }
     ?>
 </head>
 <body>
     <div class="container">
         <?php
-            if($_SERVER["REQUEST_METHOD"] == "POST") {
-                $descripcion = $_POST["descripcion"];
-                $categoria = $_POST["categoria"];
+             echo "<h1>" . $_GET["categoria"] . "</h1>";
+
+             $categoria = $_GET["categoria"];
+             $tmp_descripcion = $_GET["descripcion"];
+
+            /* $categoria = $_POST["categoria"]; */
+            if (!isset($tmp_descripcion)) {
+                $err_descripcion = "ERROR: DESCRIPCIÓN NO LEÍDA";
+            }else{
+                if ($tmp_descripcion == "") {
+                    $err_descripcion = "La descripción es obligatoria";
+                }else{
+                    $tmp_descripcion = sanear($tmp_descripcion);
+                    if (strlen($tmp_descripcion) > 255) {
+                        $err_descripcion = "Número de caracteres permitidos: Máximo 255";
+                    }else{
+                            $sql = "SELECT * FROM categorias WHERE descripcion = '$tmp_descripcion'";
+                            $resultado = $_conexion->query($sql);
+                            if ($resultado -> num_rows > 0) {
+                                $err_categoria = "Esta descripción ya existe en otra categoría.";
+                            }else{
+                                $descripcion = $tmp_descripcion;
+
+                                
+                            }
+                        }
+                    }
+                }
+            /* $sql = "SELECT * FROM categorias ORDER BY categoria";
+            $resultado = $_conexion -> query($sql); */
+
+           
+
+            if (isset($categoria) && isset($descripcion)) {
                 $sql = "UPDATE categorias SET
-                            descripcion = '$descripcion'
-                        WHERE categoria = '$categoria'";
+                descripcion = '$descripcion'
+                WHERE categoria = '$categoria'";
 
                 $_conexion -> query($sql);
             }
-
-            $sql = "SELECT * FROM categorias ORDER BY categoria";
-            $resultado = $_conexion -> query($sql);
-
-            echo "<h1>" . $_GET["categoria"] . "</h1>";
-
-            $categoria = $_GET["categoria"];
-            $sql = "SELECT * FROM categorias WHERE categoria = '$categoria'";
-            $resultado = $_conexion -> query($sql);
-            $categoria = $resultado -> fetch_assoc();
         ?>
-        <form action="" method="post" enctype="multipart/form-data">
+        <form action="" method="get" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label">Descripción: </label><br>
-                <textarea class="form-control" name="descripcion"><?php echo $categoria["descripcion"]?></textarea>
+                <textarea class="form-control" name="descripcion"><?php echo $tmp_descripcion?></textarea>
+                <?php if(isset($err_descripcion)) echo "<span class='error'>$err_descripcion</span>"?>
             </div>
             <div class="mb-3">
-                <input type="hidden" name="categoria" value="<?php echo $categoria["categoria"] ?>">
+                <input type="hidden" name="categoria" value="<?php echo $categoria?>">
                 <input class="btn btn-primary" type="submit" value="Modificar">
                 <a class="btn btn-secondary" href="index.php">Volver</a>
             </div>

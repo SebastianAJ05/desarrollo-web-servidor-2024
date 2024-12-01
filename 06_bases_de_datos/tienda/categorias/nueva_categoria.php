@@ -5,11 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nueva Categoría</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="../util/estilos.css">
     <?php
         error_reporting( E_ALL );
         ini_set( "display_errors", 1 ); 
         
         require('../util/conexion.php');
+
+        include('../util/funciones.php');
+
+        session_start();
+        if (!isset($_SESSION["usuario"])) {
+            header("location: ../usuario/iniciar_sesion.php");
+            exit;
+        }
     ?>
 </head>
 <body>
@@ -18,36 +27,78 @@
 
             
             if($_SERVER["REQUEST_METHOD"] == "POST") {
-                $categoria = $_POST["categoria"];
-                $descripcion = $_POST["descripcion"];
+                $tmp_categoria = $_POST["categoria"];
+                $tmp_descripcion = $_POST["descripcion"];
 
-                $sql = "INSERT INTO categorias 
+                if (!isset($tmp_categoria)) {
+                    $err_categoria = "ERROR: CATEGORÍA NO LEÍDA";
+                }else{
+                    if ($tmp_categoria == "") {
+                        $err_categoria = "La categoría es obligatoria";
+                    }else{
+                        $tmp_categoria = sanear($tmp_categoria);
+                        if (strlen($tmp_categoria) < 2 || strlen($tmp_categoria) > 30) {
+                            $err_categoria = "Número de caracteres permitidos: Entre 2 y 30";
+                        }else{
+                            $patron = "/^[A-Za-z ]/";
+                            if (!preg_match($patron, $tmp_categoria)) {
+                                $err_categoria = "Caracteres permitidos para la categoría: Solo letras y espacios en blanco";
+                            }else{
+                                $sql = "SELECT * FROM categorias WHERE categoria = '$tmp_categoria'";
+                                $resultado = $_conexion->query($sql);
+                                if ($resultado -> num_rows > 0) {
+                                    $err_categoria = "Esta categoría ya existe.";
+                                }else{
+                                    $categoria = $tmp_categoria;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (!isset($tmp_descripcion)) {
+                    $err_descripcion = "ERROR: DESCRIPCIÓN NO LEÍDA";
+                }else{
+                    if ($tmp_descripcion == "") {
+                        $err_descripcion = "La descripción es obligatoria";
+                    }else{
+                        $tmp_descripcion = sanear($tmp_descripcion);
+                        if (strlen($tmp_descripcion) > 255) {
+                            $err_descripcion = "Número de caracteres permitidos: Máximo 255";
+                        }else{
+                                $sql = "SELECT * FROM categorias WHERE descripcion = '$tmp_descripcion'";
+                                $resultado = $_conexion->query($sql);
+                                if ($resultado -> num_rows > 0) {
+                                    $err_categoria = "Esta descripción ya existe en otra categoría.";
+                                }else{
+                                    $descripcion = $tmp_descripcion;
+                                }
+                            }
+                        }
+                    }
+
+
+                if (isset($categoria) && isset($descripcion)) {
+                    $sql = "INSERT INTO categorias 
                     (categoria, descripcion)
                     VALUES
                     ('$categoria','$descripcion')
                 ";
 
                 $_conexion -> query($sql);
-
-                /**
-                 * INSERT INTO animes
-                 *  (nombre, precio, categoria, num_temporadas)
-                 * VALUES
-                 *  ('Doraemon', 'Toei Animation', 1979, 1);
-                 * 
-                 */
-
-                
+                }
             }
         ?>
         <form action="" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label">Categoría</label>
                 <input class="form-control" name="categoria" type="text">
+                <?php if(isset($err_categoria)) echo "<span class='error'>$err_categoria</span>"?>
             </div>
             <div class="mb-3">
                 <label class="form-label">Descripcion</label>
-                <input class="form-control" name="descripcion" type="text">
+                <textarea class="form-control" name="descripcion"></textarea>
+                <?php if(isset($err_descripcion)) echo "<span class='error'>$err_descripcion</span>"?>
             </div>
             <div class="mb-3">
                 <input class="btn btn-primary" type="submit" value="Crear">
