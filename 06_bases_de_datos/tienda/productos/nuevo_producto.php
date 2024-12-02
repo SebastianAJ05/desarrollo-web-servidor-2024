@@ -38,7 +38,6 @@
             if($_SERVER["REQUEST_METHOD"] == "POST") {
                 $tmp_nombre = $_POST["nombre"];
                 $tmp_precio = $_POST["precio"];
-                //$tmp_categoria = $_POST["categoria"];
                 $tmp_stock = $_POST["stock"];
                 $tmp_descripcion = $_POST["descripcion"];
                 // $_FILES, QUE ES UN ARRAY DOBLE!!!
@@ -113,8 +112,8 @@
                     if ($tmp_stock == "") {
                         $stock = 0;
                     }else{
-                        if (filter_var($tmp_stock, FILTER_VALIDATE_INT)) {
-                            $$err_stock = "El stock debe un número";
+                        if (filter_var($tmp_stock, FILTER_VALIDATE_INT) === FALSE) {
+                            $err_stock = "El stock debe un número";
                         }else{
                             if ($tmp_stock >= 1000) {
                                 $err_stock = "El stock no puede tener más de 3 cifras";
@@ -127,10 +126,10 @@
 
                 //Valido la categoría
 
-                if (!isset($tmp_categoria)) {
+                if (!isset($_POST["categoria"])) {
                     $err_categoria = "ERROR: Categoría no leída";
                 }else{
-                    $categoria = $tmp_categoria;
+                    $categoria = $_POST["categoria"];
                 }
 
 
@@ -143,6 +142,8 @@
                     ";
 
                     $_conexion -> query($sql);
+
+                    echo "<h1>Todo está bien!! Campos insertados!!</h1>";
                 }
                 
                 

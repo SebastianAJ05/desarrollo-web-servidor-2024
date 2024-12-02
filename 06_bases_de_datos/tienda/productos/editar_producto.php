@@ -109,16 +109,16 @@
 
             if (!isset($tmp_stock)) {
                 $err_stock = "ERROR: Stock no leido";
-            } else {
+            }else{
                 if ($tmp_stock == "") {
                     $stock = 0;
-                } else {
-                    if (filter_var($tmp_stock, FILTER_VALIDATE_INT) === false) {
+                }else{
+                    if (filter_var($tmp_stock, FILTER_VALIDATE_INT) === FALSE) {
                         $err_stock = "El stock debe un número";
-                    } else {
+                    }else{
                         if ($tmp_stock >= 1000) {
                             $err_stock = "El stock no puede tener más de 3 cifras";
-                        } else {
+                        }else{
                             $stock = $tmp_stock;
                         }
                     }
@@ -127,10 +127,10 @@
 
             //Valido la categoría
 
-            if (!isset($tmp_categoria)) {
+            if (!isset($_POST["categoria"])) {
                 $err_categoria = "ERROR: Categoría no leída";
-            } else {
-                $categoria = $tmp_categoria;
+            }else{
+                $categoria = $_POST["categoria"];
             }
         }
 
