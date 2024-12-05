@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar categoria</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="../util/estilos.css">
+    <link rel="stylesheet" href="../util/estilos.css" type="text/css">
     <?php
         error_reporting( E_ALL );
         ini_set( "display_errors", 1 ); 
@@ -24,12 +24,11 @@
 <body>
     <div class="container">
         <?php
-             echo "<h1>" . $_GET["categoria"] . "</h1>";
-
              $categoria = $_GET["categoria"];
              $tmp_descripcion = $_GET["descripcion"];
 
-            /* $categoria = $_POST["categoria"]; */
+            echo "<h1>Descripción de la categoría: $categoria</h1>";
+
             if (!isset($tmp_descripcion)) {
                 $err_descripcion = "ERROR: DESCRIPCIÓN NO LEÍDA";
             }else{
@@ -52,10 +51,6 @@
                         }
                     }
                 }
-            /* $sql = "SELECT * FROM categorias ORDER BY categoria";
-            $resultado = $_conexion -> query($sql); */
-
-           
 
             if (isset($categoria) && isset($descripcion)) {
                 $sql = "UPDATE categorias SET
@@ -63,6 +58,8 @@
                 WHERE categoria = '$categoria'";
 
                 $_conexion -> query($sql);
+
+                echo "<h1 class='exito'>Todo Correcto!! La categoría $categoria se ha modificado!!</h1>";
             }
         ?>
         <form action="" method="get" enctype="multipart/form-data">

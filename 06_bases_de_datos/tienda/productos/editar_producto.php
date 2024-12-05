@@ -155,6 +155,8 @@
                 WHERE id_producto = $id_producto";
 
             $_conexion->query($sql);
+
+            echo "<h1 class='exito'>Todo está bien!! Campos modificados!!</h1>";
         }
         ?>
         <form action="" method="post" enctype="multipart/form-data">

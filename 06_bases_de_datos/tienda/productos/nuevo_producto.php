@@ -143,7 +143,7 @@
 
                     $_conexion -> query($sql);
 
-                    echo "<h1>Todo está bien!! Campos insertados!!</h1>";
+                    echo "<h1 class='exito'>Todo está bien!! Campos insertados!!</h1>";
                 }
                 
                 
