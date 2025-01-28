@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edades</title>
-    <?php include("../detector_errores.php"); ?>
 </head>
 <body>
 <!-- Crear un formulario que reciba dos valores: el nombre
@@ -25,21 +24,17 @@
     <input type="submit" value="Calcular">
 </form>
     <?php 
-        if($_SERVER["REQUEST_METHOD"] == "POST"){
-            
-        }
+        
         $nombre = $_POST["nombre"];
         $edad = (int)$_POST["edad"];
 
-
-        $resultado = match(true) {
-            $edad >= 0 && $edad <= 18 => $nombre . ", eres menor de edad",
-            $edad >= 18 && $edad < 65 => $nombre . ", eres mayor de edad",
-            $edad >= 65 && $edad <= 120 => $nombre . ", te has jubilado ya",
-            default => "Error"
-            };
-
-            echo "<p>$resultado</p>";
+        if ($edad < 18) {
+            echo $nombre . ", eres menor de edad";
+        }elseif($edad >= 18 && $edad < 65){
+            echo $nombre . ", eres mayor de edad";
+        }else{
+            echo $nombre . ", te has jubilado ya";
+        }
         
     ?>
 </body>

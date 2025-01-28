@@ -3,61 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>IRPF</title>
 </head>
 <body>
     <form action="" method="post">
-        <input type="number" name="salario" placeholder="Salario">
-        <input type="submit" value="Calcular salario bruto">
+        <label>Salario Anual</label>
+        <input type="Number" name="salario">
+        <input type="submit" value="Calcular Porcentaje">
     </form>
-    <?php
-    if($_SERVER["REQUEST_METHOD"] == "POST") {
-        $salario = $_POST["salario"];
-
-        $salario_final = null;
+    <?php 
+    
+        /**
+         * Hasta 12.450€ --> 19%
+         * De 12.450€ hasta 20.199€ --> 24%
+         * De 20.200 hasta 35.199 --> 30%
+         * Desde 35.200 hasta 59.999€ --> 37%
+         * Desde 60.000€ hasta 299.999€ --> 45%
+         * A partir de 300.000 € --> 47,0%
+        */
+    $salario = (int)$_POST["salario"];
+    $sobras=0.0;
+    $aniadido=0.0;
+    $retencion=0.0;
+    $resto = 0.0;
+    if($salario < 12450) {
+        $aniadido = ($salario * 19)/100;
+    }if($salario >= 12450 && $salario <= 20199) {
+        $sobras = (float)12450*0.19;
+        $resto = $salario - 12450;
+        $retencion = ($resto * 24)/100;
+        $aniadido += $sobras + $retencion;
         
-        $tramo1 = (12450 * 0.19);
-        $tramo2 = ((20200 - 12450) * 0.24);
-        $tramo3 = ((35200 - 20200) * 0.30);
-        $tramo4 = ((60000 - 35200) * 0.37);
-        $tramo5 = ((300000 - 60000) * 0.45);
-
-        if($salario <= 12450) {
-            $salario_final = $salario - ($salario * 0.19);
-        } elseif ($salario > 12450 && $salario <= 20200) {
-            $salario_final = $salario 
-                - $tramo1 
-                - (($salario - 12450) * 0.24); 
-        } elseif ($salario > 20200 && $salario <= 35200) {
-            $salario_final = $salario
-                - $tramo1
-                - $tramo2
-                - (($salario - 20200) * 0.30);
-        } elseif ($salario > 35200 && $salario <= 60000) {
-            $salario_final = $salario 
-                - $tramo1
-                - $tramo2 
-                - $tramo3
-                - (($salario - 35200) * 0.37);
-        } elseif ($salario > 60000 && $salario <= 300000) {
-            $salario_final = $salario 
-                - $tramo1
-                - $tramo2 
-                - $tramo3
-                - $tramo4
-                - (($salario - 60000) * 0.45);
-        } else {
-            $salario_final = $salario
-                - $tramo1
-                - $tramo2 
-                - $tramo3
-                - $tramo4
-                - $tramo5
-                - (($salario - 300000) * 0.47);
-        }
-
-        echo "<h1>El salario neto de $salario" . "€ es $salario_final" . "€</h1>";
+    }if ($salario >= 20200 && $salario <= 35199) {
+        $sobras = (float)20200*0.24;
+        $resto = $salario - 20200;
+        $retencion = ($resto * 30)/100;
+        $aniadido += $sobras + $retencion;
+        
+    }if ($salario >= 35200 && $salario <= 59999) {
+        $sobras = (float)35200*0.30;
+        $resto = $salario - 35200;
+        $retencion = ($resto * 37)/100;
+        $aniadido += $sobras + $retencion;
+        
+    }if ($salario >= 60000 && $salario <= 299999) {
+        $sobras = (float)60000*0.37;
+        $resto = $salario - 60000;
+        $retencion = ($resto * 45)/100;
+        $aniadido += $sobras + $retencion;
+        
+    }if($salario >= 300000){
+        $sobras = (float)300000*0.45;
+        $resto = $salario - 300000;
+        $retencion = ($resto * 47)/100;
+        $aniadido += $sobras + $retencion;
+        
     }
+    echo "Con $salario € anuales, te quedas con: " . ($salario-$aniadido) . "€";
     ?>
 </body>
 </html>

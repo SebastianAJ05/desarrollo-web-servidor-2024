@@ -340,6 +340,7 @@
             </thead>
             <tbody>
         <?php 
+        
         foreach ($alumnos as $nombre => $nota) {
             echo "<tr>";
             echo "<td>" . $nombre . "</td>";
@@ -352,7 +353,7 @@
             }elseif($nota <= 10){
                 echo "<td class='aprobado'>$nota (tiene sobresaliente)</td>";
             }else {
-                echo "<td>Error</td>";
+
             }
             echo "</tr>";
         }

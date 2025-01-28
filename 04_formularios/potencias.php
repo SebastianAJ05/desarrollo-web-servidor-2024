@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Potencias</title>
-    <?php include("../detector_errores.php"); ?>
 </head>
 <body>
 <!--CREAR UN FORMULARIO QUE RECIBA DOS NÚMEROS:
@@ -27,9 +26,7 @@ EJEMPLOS:
     <input type="submit" value="Calcular">
     </form>
     <?php 
-    if($_SERVER["REQUEST_METHOD"] == "POST"){
-            
-    }
+    
     $base = (int)$_POST["base"];
     $exponente = (int)$_POST["exponente"];
     //$res = $base**$exponente;

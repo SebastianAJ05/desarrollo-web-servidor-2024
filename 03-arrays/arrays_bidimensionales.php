@@ -100,47 +100,5 @@
     ?>
         </tbody>
     </table>
-
-    <?php 
-    
-    for ($i=0; $i < count($videojuegos); $i++) { 
-        $videojuegos[$i][3] = "X";
-    }
-
-
-    
-    
-    ?>
-    <table>
-            <thead>
-                <th>Título</th>
-                <th>Género</th>
-                <th>Precio</th>
-                <th>¿Gratis?</th>
-            <tbody>
-
-    <?php
-    //Ej 2
-
-    $_categoria = array_column($videojuegos, 1);
-    array_multisort($_categoria, SORT_DESC, $videojuegos);
-
-    foreach($videojuegos as $videojuego){
-        list($titulo, $categoria, $precio, $gratis) = $videojuego;
-        echo "<tr>";
-        echo "<td>$titulo</td>";
-        echo "<td>$categoria</td>";
-        echo "<td>$precio</td>";
-        if ($precio == 0) {
-            $gratis = "Es gratis";
-        }else{
-            $gratis = "Tienes que pagar";
-        }
-        echo "<td>$gratis</td>";
-        echo "</tr>";
-    }
-    ?>
-        </tbody>
-    </table>
 </body>
 </html>

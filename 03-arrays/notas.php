@@ -35,15 +35,14 @@
 
     //Ej 1
     array_push($notas, ["Carlos", "Desarrollo web servidor"]);
-    array_push($notas, ["Carlos", "Diseño de interfaces"]);
+    array_push($notas, ["Carlos", "Desarrollo web cliente"]);
     array_push($notas, ["Ayoub", "Desarrollo web servidor"]);
-    array_push($notas, ["Ayoub", "Despliegue"]);
+    array_push($notas, ["Ayoub", "Desarrollo web cliente"]);
 
     //Ej 2
     unset($notas[1]);
 
-    // Ordenar :sort($notas);
-    $notas = array_values($notas); //O reasignar
+    sort($notas);
     //Ej 3 y 4
     for ($i=0; $i < count($notas); $i++) { 
         $notas[$i][2] = rand(1,10);
@@ -56,10 +55,10 @@
     }
 
     //Ej 5
-    $_estudiante = array_column($notas,0);
+    $_alumnos = array_column($notas,0);
     $_nota = array_column($notas,2);
     $_asignatura = array_column($notas, 1);
-    array_multisort($_estudiante, SORT_ASC, $_nota, SORT_ASC, $_asignatura, SORT_ASC, $notas);
+    array_multisort($_alumnos, SORT_ASC, $_nota, SORT_ASC, $_asignatura, SORT_ASC, $notas);
 
     ?>
     <table>
