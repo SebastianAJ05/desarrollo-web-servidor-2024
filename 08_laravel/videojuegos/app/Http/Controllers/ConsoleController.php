@@ -13,6 +13,6 @@ class ConsoleController extends Controller
             "Nintendo Switch"
         ];
 
-        return view('consolas');
+        return view('consolas',["consolas" => $consolas]);
     }
 }
