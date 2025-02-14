@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Videojuego;
 
 class VideogameController extends Controller
 {
@@ -11,7 +12,15 @@ class VideogameController extends Controller
      */
     public function index()
     {
-        return view('videojuegos/index');
+       
+        /* $videojuegos = [
+            ["Hollow Knight","PEGI 18","Aventuras"],
+            ["Elden Ring","PEGI 18","Souls"],
+            ["The Legend of Zelda","PEGI 7","Aventuras"]
+        ]; */
+
+        $videojuegos = Videojuego::all();
+        return view('videojuegos/index',["videojuegos" => $videojuegos]);
     }
 
     /**

@@ -7,9 +7,14 @@
 </head>
 <body>
     <h1>Lista de consolas</h1>
+   {{--  <table>
+        <thead>
+            <th></th>
+        </thead>
+    </table> --}}
     <ul>
         @foreach($consolas as $consola)
-        <li>{{ $consola }}</li>
+        <li>{{ $consola-> nombre }}</li>
         @endforeach
     </ul>
 </body>

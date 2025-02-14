@@ -11,11 +11,8 @@
 <body>
     <h1>Index de videojuegos</h1>
     <?php
-    $videojuegos = [
-        ["Resident Evil 3",18,"Survival Horror"],
-        ["Inazuma Eleven", 3,"RPG"],
-        ["God of War", 18, "Hack & Slash"]
-    ];
+   /*  $videojuegos = [['Resident Evil 3', 18, 'Survival Horror'], ['Inazuma Eleven', 3, 'RPG'], ['God of War', 18, 'Hack & Slash']]; */
+
     ?>
     <table>
         <thead>
@@ -23,14 +20,18 @@
             <th>Pegi</th>
             <th>Género</th>
         </thead>
-        @foreach ($videojuegos as $videojuego)
-            <tr>
-                
-                <td>{{ $videojuego[0] }}</td>
-                <td>{{ $videojuego[1] }}</td>
-                <td>{{ $videojuego[2] }}</td>
-            </tr>
-        @endforeach
+        <tbody>
+            @foreach ($videojuegos as $videojuego)
+            @php
+            @endphp
+                <tr>
+
+                    <td>{{ $videojuego -> nombre }}</td>
+                    <td>{{ $videojuego -> pegi }}</td>
+                    <td>{{ $videojuego -> genero }}</td>
+                </tr>
+            @endforeach
+        </tbody>
     </table>
 </body>
 
