@@ -27,7 +27,7 @@ class ConsoleController extends Controller
      */
     public function create()
     {
-        //
+        return view("consolas/create");
     }
 
     /**
@@ -35,7 +35,12 @@ class ConsoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $consola = new Consola;
+        $consola -> nombre = $request -> input("nombre"); //igual que $_POST["nombre"]
+        $consola -> ano_lanzamiento = $request -> input("ano_lanzamiento");
+
+        $consola -> save();
+        return redirect("/consolas");
     }
 
     /**
@@ -43,7 +48,9 @@ class ConsoleController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $consola = Consola::find($id);
+
+        return view('consolas/show',["consola" => $consola]);
     }
 
     /**

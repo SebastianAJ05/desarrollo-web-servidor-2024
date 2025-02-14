@@ -15,6 +15,7 @@
     <ul>
         @foreach($consolas as $consola)
         <li>{{ $consola-> nombre }}</li>
+        {{-- <li>{{ $consola-> ano_lanzamiento }}</li> --}}
         @endforeach
     </ul>
 </body>
